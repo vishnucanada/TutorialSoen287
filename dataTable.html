@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--<link rel="stylesheet" href="tableStyle.css">-->
+</head>
+
+<body>
+    
+    <h1>Welcome to your Results Page</h1>
+    <div id = "results">
+        Below Are your results for each assesment displayed in a graph<button class = "btn btn-success" onclick = "updateChart()">Refresh</button>
+    </div>
+    
+    <canvas id = "myChart" height="1px" width="10px" Your browser does not support this canvas>
+    <script>
+        let grades =[92,77,80,79,88,79,90];
+        const labels = [
+          'Assignment 1',
+          'Assignment 2',
+          'Assignment 3',
+          'Assignment 4',
+          'Labs',
+          'Midterm',
+          'Exam',
+          
+        ];
+      
+        const data = {
+          labels: labels,
+          datasets: [{
+            label: 'Your Overall Grades',
+            //backgroundColor: 'rgba(141, 153, 174,0.7)',
+            //backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(240,248,255))',
+            //borderColor: 'rgb(255, 99, 132)',
+            color: 'rgb(240,248,255)',//font color
+
+            data: grades,
+          }]
+        };
+      
+        const config = {
+          type: 'line',
+          data: data,
+          options: {
+            y: {
+                min: 0,
+                max: 100
+                
+            }
+            
+          }
+        };
+
+
+        const myChart = new Chart(
+        document.getElementById('myChart'),config);
+
+        //function adds data to the given chart
+        function addData(chart, label, data) {
+            chart.data.labels.push(label);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(data);
+            });
+            chart.update();
+        }
+
+        //functions removes data from the given chart
+
+        function removeData(chart) {
+            chart.data.labels.pop();
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.pop();
+            });
+            chart.update();
+        }
+
+
+       
+
+
+
+        //below are the functions associated with displaying specific data
+
+        function averageFromGrades(grades){
+        var average = 0;
+        let total = 0;
+        for(let i = 0; i < grades.length;i++){
+            total = total + grades[i];
+        }
+
+        average = total/grades.length;
+        return average;
+
+        }
+        function standardDeviation(grades){
+        
+            let count = 0;
+            let sum = 0;
+            
+            let averageFromFunction = averageFromGrades(grades);
+            let standardDeviation = 0;
+
+            for(let i = 0; i <grades.length;i++){
+                count = count + Math.pow(grades[i]-averageFromFunction,2);
+                
+            }
+            standardDeviation = Math.sqrt(count/grades.length);
+            return standardDeviation;
+
+        }
+
+        function median(grades){
+            let middle = Math.round(grades.length/2);
+            let sum = 0;
+            if(grades.length%2 !=0){
+                middle = Math.round(grades.length/2)-1;
+                return grades[middle];
+            }else{
+                sum = (grades[middle]+grades[middle-1])/2;
+                return sum;
+            }
+            
+            
+        }
+
+        function mode(grades){
+            let count = 0;
+            for(let i = 0;i<grades.length;i++){
+                if(grades[i] == grades[i+1]){
+                    count = count+1;
+                }
+            }
+            
+        }
+        function range(grades) {
+            grades.sort();
+            return [grades[0], grades[grades.length - 1]];
+        }
+
+        function round(number){
+            return Math.round(number*100)/100;
+        }
+
+       
+
+        
+        
+    </script>
+    </canvas>
+    </div>
+    <div id="information">
+        <table>
+            <tr>
+                <td>Assignment 1</td>
+                <td>Assignment 2</td>
+                <td>Assignment 3</td>
+                <td>Assignment 4</td>
+                <td>Labs</td>
+                <td>Miderm</td>
+                <td>Exam</td>
+            </tr>
+            <tr>
+                <td><script>document.write(grades[0])</script></td>
+                <td><script>document.write(grades[1])</script></td>
+                <td><script>document.write(grades[2])</script></td>
+                <td><script>document.write(grades[3])</script></td>
+                <td><script>document.write(grades[4])</script></td>
+                <td><script>document.write(grades[5])</script></td>
+                <td><script>document.write(grades[6])</script></td>
+
+            </tr>
+        </table>
+        Your average is: average <script>document.write(round((averageFromGrades(grades))))</script>
+    </br>The standard deviation of your average is:  <script>document.write(round((standardDeviation(grades))))</script>
+    </br>Your median is: <script>document.write(round(median(grades)))</script>
+    </br>Your range is: [<script>document.write(range(grades))</script>]
+    </div>
+
+
+
+
+</body>
+</html>
